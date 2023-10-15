@@ -10,6 +10,6 @@ csv = "1.2"
 reqwest = {version = "0.11", features = ["blocking"]}
 scraper = "0.13.0"
 rayon = "1.8.0"
-clap = "4.4.6"
+clap = "2.33"
 
 [dev-dependencies]

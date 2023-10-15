@@ -41,3 +41,5 @@ fn main() {
     }
     println!("{:?}", rows);
 }
+
+// implement fn write to csv file
