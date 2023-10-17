@@ -119,8 +119,8 @@ fn main() {
                     Arg::with_name("filter")
                         .short("f")
                         .long("filter")
-                        .value_name("FILTER_COL")
-                        .help("Filter columns")
+                        .value_name("FILTER_WORD")
+                        .help("Filter keyword")
                         .multiple(true)
                 )
                 .arg(

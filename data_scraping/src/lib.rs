@@ -51,18 +51,35 @@ impl Csv {
             None => panic!("Could not find column: {}", col_name),
         }
     }
+
+    pub fn filter(&mut self, query: &[String], rows: &Vec<Vec<String>>) -> Self {
+        let mut result = Vec::new();
+        for row in rows {
+            if row.iter().any(|field|  query.contains(&field.to_string())) {
+                let nrow = row.iter().map(|field| field.to_string()).collect::<Vec<String>>();
+                result.push(nrow.clone())
+            }
+        } 
+        let header =  rows[0].clone();
+        Csv {
+            header: header,
+            rows: result,
+        }
+    }
+
 }
 
 pub fn get_csv_records(filename: &str) -> Vec<Vec<String>> {
     let mut csv_contents = String::new();
     let mut csv_file = File::open(filename).expect("Cannot open file!");
     csv_file.read_to_string(&mut csv_contents).expect("Cannot read file!");
-
+    
     csv_contents.split('\n')
-            .take_while(|&line| line.len() > 0)
-            .map(|line| line.split(',').map(|col| col.to_string()).collect())
-            .collect()
+    .take_while(|&line| line.len() > 0)
+    .map(|line| line.split(',').map(|col| col.to_string()).collect())
+    .collect()
 }
+
 
 
 //  filter 0 % 

@@ -30,7 +30,7 @@ fn main() -> Result<(), Error> {
     // println!("{:?}", rdr);
     let headers = rdr.headers()?.clone();
     let headers_v: Vec<String> = headers.iter().map(|s| s.to_string()).collect();
-    let processing_unit = ProcessingUnit {input: PathBuf::from("offers-1000.csv"), output: PathBuf::from("output.json")};
+    let processing_unit = ProcessingUnit {input: PathBuf::from("organizations-100.csv"), output: PathBuf::from("output.json")};
     // println!("{:?}", headers);
     // Iterate over each record (row) in the CSV
     for result in rdr.records() {
@@ -83,11 +83,22 @@ pub fn convert_data(processing_unit: &ProcessingUnit) {
 
 pub fn write_to_file(mut rdr: Reader<File>, headers: &[String], output: &PathBuf) {
     if let Ok(mut file_handler) = File::create(output) {
+        let mut object_started = false; // Track whether an object has started
+        let _ = file_handler.write("[\n".as_bytes());
+        
         rdr.records().for_each(|optional_record| {
             if let Ok(record) = optional_record {
+                if object_started {
+                    let _ = file_handler.write(",".as_bytes());
+                }
+                
                 let converted_line_output = convert_line(headers, &record);
                 let _ = file_handler.write_all(converted_line_output.as_bytes());
+                
+                object_started = true; // Set to true after the first record in an object
             }
         });
+        
+        let _ = file_handler.write("\n]".as_bytes());
     }
 }

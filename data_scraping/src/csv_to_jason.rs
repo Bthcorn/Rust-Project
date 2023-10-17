@@ -15,7 +15,7 @@ pub struct ProcessingUnit {
     output: PathBuf,
 }
 
-pub fn convert_line(headers: &[String], record: &StringRecord) -> String {
+pub fn convert_line(headers: &[String], record: &Vec<Vec<String>>) -> String {
     let mut line = "{".to_owned();
     headers.iter().enumerate().for_each(|(i, h)| {
         let value = (record.get(i).unwrap()).to_string();
@@ -27,18 +27,20 @@ pub fn convert_line(headers: &[String], record: &StringRecord) -> String {
     });
 
     let mut nline = line[0..line.len() - 1].to_string();
-    a.push_str("}\n");
+    a.push_str("},\n");
     nline
 }
 
 pub fn write_to_file(mut rdr: Reader<file>, headers: &[String], output: &PathBuf) {
     if let Ok(mut file_handler) = File::create(output) {
+        file_handler.write("[\n".as_bytes());
         rdr.records().for_each(|optional_record| {
             if let Ok(record) = optional_record {
                 let converted_line_output = convert_line(headers, &record);
                 let _ = file_handler.write_all(converted_line_output.as_bytes());
             }
         });
+        file_handler.write("\n]".as_bytes());
     }
 }
 
@@ -67,7 +69,7 @@ fn build_output_path(output: &Option<String>, input: &Path ) -> PathBuf {
 
     fs::create_dir_all(&output_directory).unwrap(); 
     let mut last = input.iter().last().unwrap().to_string();
-    last.push(".jason");
+    last.push(".json");
     output_directory.push(last);
 
     output_directory
