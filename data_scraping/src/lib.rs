@@ -162,7 +162,7 @@ pub fn get_args() -> Result<(ConfigApp), Box<dyn Error>> {
                         .help("Output JASON file")
                         .default_value("default.json")
                         .required(true)
-                        // .takes_value(true)
+                        .takes_value(true)
                 ),
         ).subcommand(
             SubCommand::with_name("scraping")
