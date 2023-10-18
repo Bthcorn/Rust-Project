@@ -36,6 +36,7 @@ fn main() -> Result<(), Error> {
     for result in rdr.records() {
         // Each record is a Result<StringRecord, Error>
         let record = result?;
+        let string_values: Vec<String> = record.iter().map(|field| field.to_string()).collect();
         
         // Access fields within the record
         // let name = &record[0];
