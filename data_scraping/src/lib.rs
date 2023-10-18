@@ -1,19 +1,19 @@
-// use reqwest::header;
-
 use std::{
-    borrow::Borrow,
+    // borrow::Borrow,
     error::Error,
     fs::File,
     io::{Write, Read},
     path::{Path, PathBuf},
-    string::String,
+    string::String, 
+    // str::FromStr,
 };
-use clap::{App, Arg, SubCommand, ArgMatches};
+use clap::{App, Arg, SubCommand};
 
 use scraper::{Html, Selector};
 use reqwest;
 
 use csv::{Reader, StringRecord, Writer};
+// use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
 
 #[derive(Debug)]
 pub struct Csv {
@@ -34,7 +34,7 @@ impl Csv {
         }
     }
 
-    pub fn sort_by(&mut self, col_name: String) {
+    pub fn sort_by(&mut self, col_name: &str) {
         let col_index = self.header.iter().position(|h| h == &col_name);
 
         match col_index {
@@ -43,12 +43,12 @@ impl Csv {
         }
     }
 
-    pub fn filter(&mut self, query: &[String], rows: &Vec<Vec<String>>) -> Self {
+    pub fn filter(&mut self, query: &[String]) -> Self {
         let mut result = Vec::new();
         for row in &self.rows {
-            if row.iter().any(|field|  query.contains(&field.to_string())) {
-                let nrow = row.iter().map(|field| field.to_string()).collect::<Vec<String>>();
-                result.push(nrow.clone())
+            if row.iter().any(|field|  query.contains(field)) {
+                // let nrow = row.iter().map(|field| field.to_string()).collect::<Vec<String>>();
+                result.push(row.clone())
             }
         } 
         let header =  self.header.clone();
@@ -56,6 +56,23 @@ impl Csv {
             header: header,
             rows: result,
         }
+    }
+
+    pub fn write_to_csv(&mut self, file_path: &str) -> Result<(), Box<dyn Error>> {
+        let file = match File::create(file_path) {
+            Ok(file) => file,
+            Err(err) => {
+                eprintln!("Error creating file: {}", err);
+                return Err(err.into());
+            }
+        };
+        let mut wtr = Writer::from_writer(file);
+        wtr.write_record(&self.header).expect("expect header");
+        for row in &self.rows {
+            wtr.write_record(row)?;
+        }
+        wtr.flush()?;
+        Ok(())
     }
 
 }
@@ -70,6 +87,7 @@ pub fn get_csv_records(filename: &str) -> Vec<Vec<String>> {
     .map(|line| line.split(',').map(|col| col.to_string()).collect())
     .collect()
 }
+// ===========================================================
 
 pub fn scraping(url: &str) -> Vec<Vec<String>> {
     let response = reqwest::blocking::get(url).expect("Could not load url.");
@@ -111,7 +129,7 @@ pub fn scraping(url: &str) -> Vec<Vec<String>> {
    rows
 }
 
-pub fn write_to_csv(file_path: &str, rows: Vec<Vec<String>>) -> Result<(), Box<dyn Error>> {
+pub fn write_to_csv(file_path: &PathBuf, rows: Vec<Vec<String>>) -> Result<(), Box<dyn Error>> {
     let file = match File::create(file_path) {
         Ok(file) => file,
         Err(err) => {
@@ -119,7 +137,6 @@ pub fn write_to_csv(file_path: &str, rows: Vec<Vec<String>>) -> Result<(), Box<d
             return Err(err.into());
         }
     };
-
     let mut wtr = Writer::from_writer(file);
     for row in rows {
         wtr.write_record(&row)?;
@@ -127,6 +144,67 @@ pub fn write_to_csv(file_path: &str, rows: Vec<Vec<String>>) -> Result<(), Box<d
     wtr.flush()?;
     Ok(())
 }
+// ===========================================================
+#[derive(Debug)]
+pub struct ProcessingUnit {
+    input: PathBuf,
+    output: PathBuf,
+}
+
+pub fn convert_line(headers: &[String], record: &StringRecord) -> String {
+    let mut line = "{".to_owned();
+    headers.iter().enumerate().for_each(|(i, h)| {
+        let value = (record.get(i).unwrap()).to_string();
+        line.push('"');
+        line.push_str(h);
+        line.push_str("\":\"");
+        line.push_str(&value.replace('\"', "\\\""));
+        line.push_str("\",");
+    });
+
+    let mut nline = line[0..line.len() - 1].to_string();
+    nline.push_str("}\n");
+    nline
+}
+
+pub fn convert_data(processing_unit: &ProcessingUnit) {
+    if !Path::exists(Path::new(&processing_unit.input)) {
+        panic!("{:?}", &processing_unit.input);
+    }
+
+    let mut rdr = Reader::from_path(&processing_unit.input).unwrap();
+    let headers: Vec<String> = rdr.headers()
+            .unwrap()
+            .iter()
+            .map(|s| String::from(s).replace("\'", "\\\""))
+            .collect();
+        
+    write_to_json(rdr, &headers, &processing_unit.output)
+}
+
+pub fn write_to_json(mut rdr: Reader<File>, headers: &[String], output: &PathBuf) {
+    if let Ok(mut file_handler) = File::create(output) {
+        let mut object_started = false; // Track whether an object has started
+        let _ = file_handler.write("[\n".as_bytes());
+        
+        rdr.records().for_each(|optional_record| {
+            if let Ok(record) = optional_record {
+                if object_started {
+                    let _ = file_handler.write(",".as_bytes());
+                }
+                
+                let converted_line_output = convert_line(headers, &record);
+                let _ = file_handler.write_all(converted_line_output.as_bytes());
+                
+                object_started = true; // Set to true after the first record in an object
+            }
+        });
+        
+        let _ = file_handler.write("\n]".as_bytes());
+    }
+}
+// ===========================================================
+
 #[derive(Debug)]
 pub struct ConfigApp {
     subcommand: String,
@@ -137,7 +215,7 @@ pub struct ConfigApp {
     sort: Option<String>,
 }
 
-pub fn get_args() -> Result<(ConfigApp), Box<dyn Error>> {
+pub fn get_args() -> Result<ConfigApp, Box<dyn Error>> {
     let matches = App::new("data_Scraping")
         .version("0.1.0")
         .author("Bowornthat SE15 <66010968@kmitl.ac.th>")
@@ -282,13 +360,32 @@ pub fn run(config: ConfigApp) -> Result<(), Box<dyn Error>> {
 }
 
 pub fn run_convert(config: &ConfigApp) -> Result<(), Box<dyn Error>> {
-    unimplemented!()
+    let input = PathBuf::from(config.input.as_ref().unwrap());
+    let output = PathBuf::from(config.output.as_ref().unwrap());
+    let processing_unit = ProcessingUnit {input, output};
+    convert_data(&processing_unit);
+    Ok(())
 }
 
 pub fn run_scraping(config: &ConfigApp) -> Result<(), Box<dyn Error>> {
-    unimplemented!()
+    let url = config.url.as_ref().unwrap();
+    let rows = scraping(&url);
+    let file_path = PathBuf::from(config.output.as_ref().unwrap());
+    let _ = write_to_csv(&file_path, rows);
+    Ok(())
 }
 
 pub fn run_analyze(config: &ConfigApp) -> Result<(), Box<dyn Error>> {
-    unimplemented!()
+    let input = config.input.as_ref().unwrap();
+    let output = config.output.as_ref().unwrap();
+    let rows = get_csv_records(&input);
+    let mut csv = Csv::new(rows);
+    if let Some(sort)= config.sort.as_ref() {
+        csv.sort_by(&sort)
+    };
+    if let Some(query) = config.filter.as_ref() {
+        csv = csv.filter(&query);
+    };
+    let _ = csv.write_to_csv(&output);
+    Ok(())
 }
