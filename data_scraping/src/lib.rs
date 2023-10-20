@@ -58,7 +58,7 @@ impl Csv {
         }
     }
 
-    pub fn write_to_csv(&mut self, file_path: &str) -> Result<(), Box<dyn Error>> {
+    pub fn write_to_csv(&mut self, file_path: &PathBuf) -> Result<(), Box<dyn Error>> {
         let file = match File::create(file_path) {
             Ok(file) => file,
             Err(err) => {
@@ -77,7 +77,7 @@ impl Csv {
 
 }
 
-pub fn get_csv_records(filename: &str) -> Vec<Vec<String>> {
+pub fn get_csv_records(filename: &PathBuf) -> Vec<Vec<String>> {
     let mut csv_contents = String::new();
     let mut csv_file = File::open(filename).expect("Cannot open file!");
     csv_file.read_to_string(&mut csv_contents).expect("Cannot read file!");
@@ -376,8 +376,8 @@ pub fn run_scraping(config: &ConfigApp) -> Result<(), Box<dyn Error>> {
 }
 
 pub fn run_analyze(config: &ConfigApp) -> Result<(), Box<dyn Error>> {
-    let input = config.input.as_ref().unwrap();
-    let output = config.output.as_ref().unwrap();
+    let input =  PathBuf::from(config.input.as_ref().unwrap());
+    let output =  PathBuf::from(config.output.as_ref().unwrap());
     let rows = get_csv_records(&input);
     let mut csv = Csv::new(rows);
     if let Some(sort)= config.sort.as_ref() {
