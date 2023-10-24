@@ -1,21 +1,16 @@
 use std::{
-    // borrow::Borrow,
     error::Error,
     fs::File,
     io::{Write, Read},
     path::{Path, PathBuf},
     string::String, 
-    // str::FromStr,
 };
 use clap::{App, Arg, SubCommand};
-
 use scraper::{Html, Selector};
 use reqwest;
-
 use csv::{Reader, StringRecord, Writer};
-// use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Csv {
     header: Vec<String>,
     pub rows: Vec<Vec<String>>,
@@ -33,7 +28,7 @@ impl Csv {
             rows: rows,
         }
     }
-
+    // sort the column by choosing the index of the name column
     pub fn sort_by(&mut self, col_name: &str) {
         let col_index = self.header.iter().position(|h| h == &col_name);
 
@@ -47,7 +42,6 @@ impl Csv {
         let mut result = Vec::new();
         for row in &self.rows {
             if row.iter().any(|field|  query.contains(field)) {
-                // let nrow = row.iter().map(|field| field.to_string()).collect::<Vec<String>>();
                 result.push(row.clone())
             }
         } 
@@ -55,7 +49,7 @@ impl Csv {
         Csv {
             header: header,
             rows: result,
-        }
+        } 
     }
 
     pub fn write_to_csv(&mut self, file_path: &PathBuf) -> Result<(), Box<dyn Error>> {
@@ -75,6 +69,40 @@ impl Csv {
         Ok(())
     }
 
+    // pub fn get_visual(&mut self, query: &[String]) -> (Vec<String>, Vec<f64>) {
+    //     let id_name = self.header.iter().position(|h| h == &query[0]);
+    //     let id_value = self.header.iter().position(|v| v == &query[1]);
+    //     let mut names = Vec::new();
+    //     let mut values = Vec::new();
+
+    //     match id_name {
+    //         Some(index) => {
+    //             while let Some(row) = self.rows.iter().next() {
+    //                 names.push(row[index].clone())
+    //             }
+    //         }
+    //         None => panic!("Could not find column: {}", query[0]),
+    //     }
+
+    //     match id_value {
+    //         Some(index) => {
+    //             while let Some(row) = self.rows.iter().next() {
+    //                 match row[index].clone().replace(",", "").parse::<f64>() {
+    //                     Ok(value) => {
+    //                         values.push(value);
+    //                     }, 
+    //                     Err(err) => {
+    //                         eprintln!("Error parsing: {}", err);
+    //                         std::process::exit(1)
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         None => panic!("COuld not find column: {}", query[1]),
+    //     }
+    //     (names, values)
+    // }
+
 }
 
 pub fn get_csv_records(filename: &PathBuf) -> Vec<Vec<String>> {
@@ -87,6 +115,65 @@ pub fn get_csv_records(filename: &PathBuf) -> Vec<Vec<String>> {
     .map(|line| line.split(',').map(|col| col.to_string()).collect())
     .collect()
 }
+
+pub fn generate_svg(vis: (Vec<String>, Vec<f64>)) {
+    // let mut content = String::new();
+    let (names, values) = vis.clone();
+    let max_value = values.clone().into_iter().reduce(f64::max).unwrap_or(0.0);
+
+    // Define the dimensions of the SVG casnvas
+    let width = 400.0;
+    let height = 300.0;
+
+    // Create an output file
+    let mut file = File::create("bargraph.svg").expect("Unable to create file");
+
+    // Write the SVG header
+    write!(
+        file,
+        r#"<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="{}" height="{}" xmlns="http://www.w3.org/2000/svg">
+"#,
+        width, height
+    )
+    .expect("Unable to write to file");
+
+    // Define the attributes for the bars and labels
+    let bar_width = 30;
+    let label_x_offset = 15;
+    let bar_x_offset = 50;
+
+    // Iterate over the data and create bars and labels
+    for (i, (name, value)) in names.iter().zip(values.iter()).enumerate() {
+        let x = bar_x_offset + i as u32 * (bar_width + 10);
+        let y = height - (value * height / max_value);
+
+        // Create the bar
+        write!(
+            file,
+            r#"<rect x="{}" y="{}" width="{}" height="{}" fill="blue" />"#,
+            x, y, bar_width, value * height / max_value
+        )
+        .expect("Unable to write to file");
+
+        // Create the label
+        write!(
+            file,
+            r#"<text x="{}" y="{}" font-size="12" fill="black">{}</text>"#,
+            x + label_x_offset,
+            height - 10.,
+            name
+        )
+        .expect("Unable to write to file");
+    }
+
+    // Write the closing SVG tag
+    write!(file, "</svg>").expect("Unable to write to file");
+}
+
+
 // ===========================================================
 
 pub fn scraping(url: &str) -> Vec<Vec<String>> {
@@ -204,7 +291,6 @@ pub fn write_to_json(mut rdr: Reader<File>, headers: &[String], output: &PathBuf
     }
 }
 // ===========================================================
-
 #[derive(Debug)]
 pub struct ConfigApp {
     subcommand: String,
@@ -315,7 +401,6 @@ pub fn get_args() -> Result<ConfigApp, Box<dyn Error>> {
             filter: None,
             sort: None,
             }
-            // println!("Converting CSV file: {} to JSON file: {}", input_file, output_file);
         }
         ("scraping", Some(scrap_matches)) => {
             ConfigApp {
@@ -326,8 +411,6 @@ pub fn get_args() -> Result<ConfigApp, Box<dyn Error>> {
                 filter: None,
                 sort: None,
                 }
-            // println!("Scraping url: {} to CSV file: {}", url, output_file);
-
         }
         ("analyze", Some(analyze_matches)) => { 
             let filter: Option<Vec<String>> = analyze_matches
@@ -381,11 +464,12 @@ pub fn run_analyze(config: &ConfigApp) -> Result<(), Box<dyn Error>> {
     let rows = get_csv_records(&input);
     let mut csv = Csv::new(rows);
     if let Some(sort)= config.sort.as_ref() {
-        csv.sort_by(&sort)
+        csv.sort_by(&sort);
+        let _ = csv.write_to_csv(&output);
     };
     if let Some(query) = config.filter.as_ref() {
         csv = csv.filter(&query);
+        let _ = csv.write_to_csv(&output);
     };
-    let _ = csv.write_to_csv(&output);
     Ok(())
 }
