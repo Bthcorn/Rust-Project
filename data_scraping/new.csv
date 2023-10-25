@@ -1,80 +1,31 @@
-Name,Time in office,Political party
-Robert Walpole,1721 – 1742,Whig
-Spencer Compton,1742 – 1743,Whig
-Henry Pelham,1743 – 1754,Whig
-Duke of Newcastle,1754 – 1756,Whig
-Duke of Devonshire,1756 – 1757,Whig
-Duke of Newcastle,1757 – 1762,Whig
-Earl of Bute,1762 – 1763,Tory
-George Grenville,1763 – 1765,Whig
-Marquess of Rockingham,1765 – 1766,Whig
-William Pitt,1766 – 1768,Whig
-Duke of Grafton,1768 – 1770,Whig
-Lord North,1770 – 1782,Tory
-Marquess of Rockingham,1782,Whig
-Earl of Shelburne,1782 – 1783,Whig
-Duke of Portland,1783,Whig
-William Pitt the Younger,1783 – 1801,Tory
-Henry Addington,1801 – 1804,Tory
-William Pitt the Younger,1804 – 1806,Tory
-William Grenville,1806 – 1807,Whig
-Duke of Portland,1807 – 1809,Whig
-Spencer Perceval,1809 – 1812,Tory
-Earl of Liverpool,1812 – 1827,Tory
-George Canning,1827 – 1827,Tory
-Viscount Goderich,1827 – 1828,Tory
-Duke of Wellington,1828 – 1830,Tory
-Earl Grey,1830 – 1834,Whig
-Duke of Wellington,1834,Tory
-Viscount Melbourne,1834,Whig
-Sir Robert Peel,1834 – 1835,Conservative
-Viscount Melbourne,1835 – 1841,Whig
-Sir Robert Peel,1841 – 1846,Conservative
-Lord John Russell,1846 – 1852,Whig
-The Earl of Derby,1852,Conservative
-Earl of Aberdeen,1852 – 1855,Conservative
-Viscount Palmerston,1855 – 1858,Whig
-The Earl of Derby,1858 – 1859,Conservative
-Viscount Palmerston,1859 – 1865,Whig
-Lord John Russell,1865 – 1866,Whig
-The Earl of Derby,1866 – 1868,Conservative
-Benjamin Disraeli,1868 – 1868,Conservative
-William Ewart Gladstone,1868 – 1874,Liberal
-Benjamin Disraeli,1874 – 1880,Conservative
-William Ewart Gladstone,1880 – 1885,Liberal
-Marquess of Salisbury,1885 – 1886,Conservative
-William Ewart Gladstone,1886 – 1886,Liberal
-Marquess of Salisbury,1886 – 1892,Conservative
-William Ewart Gladstone,1892 – 1894,Liberal
-Earl of Rosebery,1894 – 1895,Liberal
-Marquess of Salisbury,1895 – 1902,Conservative
-Arthur Balfour,1902 – 1905,Conservative
-Henry Campbell-Bannerman,1905 – 1908,Liberal
-Herbert Asquith,1908 – 1916,Liberal
-David Lloyd George,1916 – 1922,Liberal
-Andrew Bonar Law,1922 – 1923,Conservative
-Stanley Baldwin,1923 – 1924,Conservative
-Ramsay MacDonald,1924,Labour
-Stanley Baldwin,1924 – 1929,Conservative
-Ramsay MacDonald,1929 – 1935,Labour
-Stanley Baldwin,1935 – 1937,Conservative
-Neville Chamberlain,1937 – 1940,Conservative
-Winston Churchill,1940 – 1945,Conservative
-Clement Attlee,1945 – 1951,Labour
-Winston Churchill,1951 – 1955,Conservative
-Anthony Eden,1955 – 1957,Conservative
-Harold Macmillan,1957 – 1963,Conservative
-Alec Douglas-Home,1963 – 1964,Conservative
-Harold Wilson,1964 – 1970,Labour
-Edward Heath,1970 – 1974,Conservative
-Harold Wilson,1974 – 1976,Labour
-James Callaghan,1976 – 1979,Labour
-Margaret Thatcher,1979 – 1990,Conservative
-John Major,1990 – 1997,Conservative
-Tony Blair,1997 – 2007,Labour
-Gordon Brown,2007 – 2010,Labour
-David Cameron,2010 – 2016,Conservative
-Theresa May,2016 – 2019,Conservative
-Boris Johnson,2019 – 2022[1],Conservative
-Liz Truss,2022,Conservative
-Rishi Sunak,2022 – present,Conservative
+Type,Multi-Threaded App Score,Architecture,Cores/Threads (P+E),Base/Boost GHz,TDP / PBP / MTP
+$569 - Ryzen 9 7950X,100.00%,Zen 4,16 / 32,4.5 / 5.7,170 / 230W
+$699 - Core i9-13900KS,99.5%,Raptor Lake,24 / 32 (8+16),3.0 / 6.0,150W / 253W / 320W
+$589 - Core i9-13900K,98.62%,Raptor Lake,24 / 32 (8+16),3.0 / 5.8,125 / 253W
+$699 — Ryzen 9 7950X3D,94.7%,Zen 4,16 / 32,4.2 / 5.7,120 / 162W
+$699 - Ryzen 9 7950X3D,91.6%,Zen 4,12 / 24,4.4 / 5.6,120 / 162W
+$474 - Ryzen 9 7900X,79.51%,Zen 4,12 / 24,4.7 / 5.6,170 / 230W
+$409 - Core i7-13700K,79.05%,Raptor Lake,16 / 24 (8+8),3.4 / 5.4,125 / 253W
+$429 - Ryzen 9 7900,69.97%,Zen 4,12 / 24,3.7 / 5.4,65 / 88W
+$589 - Core i9-12900K,69.85%,Alder Lake,16 / 24 (8+8),3.2 / 5.2,125 / 241W
+$550 - Ryzen 9 5950X,67.30%,Zen 3,16 / 32,3.4 / 4.9,105W
+$319 - Core i5-13600K,60.91%,Raptor Lake,14 / 20 (6+8),3.5 / 5.1,125 / 181W
+$409 - Core i7-12700K,59.62%,Alder Lake,12 / 20 (8+4),3.6 / 5.0,125 / 190W
+$350 - Ryzen 9 5900X,58.02%,Zen 3,12 / 24,3.7 / 4.8,105W
+$349 - Ryzen 7 7700X,56.15%,Zen 4,8 /16,4.5 / 5.4,105 / 142W
+$329 - Ryzen 7 7700,52.87%,Zen 4,8 / 16,3.8 / 5.3,65 / 88W
+$449 - Ryzen 7 7800X3D,52.3%,Zen 4,8 / 16,4.2 / 5.0,120 / 162W
+$289 - Core i5-12600K,45.69%,Alder Lake,10 / 16 (6+4),3.7 / 4.9,125 / 150W
+$249 - Ryzen 5 7600X,43.89%,Zen 4,6 / 12,4.7 / 5.3,105 / 142W
+$221 - Core i5-13400 / F,43.0%,Raptor Lake,10 / 16 (6+4),2.5 / 4.6,65 /148W
+$365 - Ryzen 7 5800X3D,41.54%,Zen 3,8 / 16,3.4 / 4.5,105W
+$229 - Ryzen 5 7600,40.61%,Zen 4,6 / 12,3.8 / 5.1,65 / 88W
+$210 - Ryzen 7 5700X,39.77%,Zen 3,8 / 16,3.4 / 4.6,65W
+$189 - Core i5-12400,33.68%,Alder Lake,6 / 12 (6+0),2.5 / 4.4,65 / 117W
+$165 - Ryzen 5 5600X,32.5%,Zen 3,6 / 12,3.7 / 4.6,65W
+$140 - Ryzen 5 5600,32.3%,Zen 3,6 / 12,3.5 / 4.4,65W
+$229 - Ryzen 5 5600X3D,30.8%,Zen 3,6 / 12,3.3 / 4.4,105W
+$99 - Ryzen 5 5500,29.5%,Zen 3,6 / 12,3.6 / 4.2,65W
+$135 - Ryzen 5 5600G,29.4%,Zen 3,6 / 12,3.9 / 4.4,65W
+$110 - Core i3-13100F,24.8%,Raptor Lake,4 / 8 (4+0),3.4 / 4.5,60W / 89W
+$100 - Core i3-12100,23.3%,Alder Lake,4 / 8 (4+0),3.3 / 4.3,60W / 89W
