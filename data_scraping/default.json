@@ -1,6 +1,82 @@
 [
-{"name":"bob","age":"22","fav color":"green"}
-,{"name":"amy","age":"12","fav color":"red"}
-,{"name":"carol","age":"40","fav color":"yello"}
-
+    {
+        "Type": "$569 - Ryzen 9 7950X",
+        "Multi-Threaded App Score": "100.00%",
+        "Architecture": "Zen 4",
+        "Cores/Threads (P+E)": "16 / 32",
+        "Base/Boost GHz": "4.5 / 5.7",
+        "TDP / PBP / MTP": "170 / 230W"
+    },
+    {
+        "Type": "$699 — Ryzen 9 7950X3D",
+        "Multi-Threaded App Score": "94.7%",
+        "Architecture": "Zen 4",
+        "Cores/Threads (P+E)": "16 / 32",
+        "Base/Boost GHz": "4.2 / 5.7",
+        "TDP / PBP / MTP": "120 / 162W"
+    },
+    {
+        "Type": "$699 - Ryzen 9 7950X3D",
+        "Multi-Threaded App Score": "91.6%",
+        "Architecture": "Zen 4",
+        "Cores/Threads (P+E)": "12 / 24",
+        "Base/Boost GHz": "4.4 / 5.6",
+        "TDP / PBP / MTP": "120 / 162W"
+    },
+    {
+        "Type": "$474 - Ryzen 9 7900X",
+        "Multi-Threaded App Score": "79.51%",
+        "Architecture": "Zen 4",
+        "Cores/Threads (P+E)": "12 / 24",
+        "Base/Boost GHz": "4.7 / 5.6",
+        "TDP / PBP / MTP": "170 / 230W"
+    },
+    {
+        "Type": "$429 - Ryzen 9 7900",
+        "Multi-Threaded App Score": "69.97%",
+        "Architecture": "Zen 4",
+        "Cores/Threads (P+E)": "12 / 24",
+        "Base/Boost GHz": "3.7 / 5.4",
+        "TDP / PBP / MTP": "65 / 88W"
+    },
+    {
+        "Type": "$349 - Ryzen 7 7700X",
+        "Multi-Threaded App Score": "56.15%",
+        "Architecture": "Zen 4",
+        "Cores/Threads (P+E)": "8 /16",
+        "Base/Boost GHz": "4.5 / 5.4",
+        "TDP / PBP / MTP": "105 / 142W"
+    },
+    {
+        "Type": "$329 - Ryzen 7 7700",
+        "Multi-Threaded App Score": "52.87%",
+        "Architecture": "Zen 4",
+        "Cores/Threads (P+E)": "8 / 16",
+        "Base/Boost GHz": "3.8 / 5.3",
+        "TDP / PBP / MTP": "65 / 88W"
+    },
+    {
+        "Type": "$449 - Ryzen 7 7800X3D",
+        "Multi-Threaded App Score": "52.3%",
+        "Architecture": "Zen 4",
+        "Cores/Threads (P+E)": "8 / 16",
+        "Base/Boost GHz": "4.2 / 5.0",
+        "TDP / PBP / MTP": "120 / 162W"
+    },
+    {
+        "Type": "$249 - Ryzen 5 7600X",
+        "Multi-Threaded App Score": "43.89%",
+        "Architecture": "Zen 4",
+        "Cores/Threads (P+E)": "6 / 12",
+        "Base/Boost GHz": "4.7 / 5.3",
+        "TDP / PBP / MTP": "105 / 142W"
+    },
+    {
+        "Type": "$229 - Ryzen 5 7600",
+        "Multi-Threaded App Score": "40.61%",
+        "Architecture": "Zen 4",
+        "Cores/Threads (P+E)": "6 / 12",
+        "Base/Boost GHz": "3.8 / 5.1",
+        "TDP / PBP / MTP": "65 / 88W"
+    }
 ]

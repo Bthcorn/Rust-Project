@@ -1,0 +1,50 @@
+[
+    {
+        "Type": "$110 - Core i3-13100F",
+        "Multi-Threaded App Score": "24.8%",
+        "Architecture": "Raptor Lake",
+        "Cores/Threads (P+E)": "4 / 8 (4+0)",
+        "Base/Boost GHz": "3.4 / 4.5",
+        "TDP / PBP / MTP": "60W / 89W"
+    },
+    {
+        "Type": "$221 - Core i5-13400 / F",
+        "Multi-Threaded App Score": "43.0%",
+        "Architecture": "Raptor Lake",
+        "Cores/Threads (P+E)": "10 / 16 (6+4)",
+        "Base/Boost GHz": "2.5 / 4.6",
+        "TDP / PBP / MTP": "65 /148W"
+    },
+    {
+        "Type": "$319 - Core i5-13600K",
+        "Multi-Threaded App Score": "60.91%",
+        "Architecture": "Raptor Lake",
+        "Cores/Threads (P+E)": "14 / 20 (6+8)",
+        "Base/Boost GHz": "3.5 / 5.1",
+        "TDP / PBP / MTP": "125 / 181W"
+    },
+    {
+        "Type": "$409 - Core i7-13700K",
+        "Multi-Threaded App Score": "79.05%",
+        "Architecture": "Raptor Lake",
+        "Cores/Threads (P+E)": "16 / 24 (8+8)",
+        "Base/Boost GHz": "3.4 / 5.4",
+        "TDP / PBP / MTP": "125 / 253W"
+    },
+    {
+        "Type": "$589 - Core i9-13900K",
+        "Multi-Threaded App Score": "98.62%",
+        "Architecture": "Raptor Lake",
+        "Cores/Threads (P+E)": "24 / 32 (8+16)",
+        "Base/Boost GHz": "3.0 / 5.8",
+        "TDP / PBP / MTP": "125 / 253W"
+    },
+    {
+        "Type": "$699 - Core i9-13900KS",
+        "Multi-Threaded App Score": "99.5%",
+        "Architecture": "Raptor Lake",
+        "Cores/Threads (P+E)": "24 / 32 (8+16)",
+        "Base/Boost GHz": "3.0 / 6.0",
+        "TDP / PBP / MTP": "150W / 253W / 320W"
+    }
+]

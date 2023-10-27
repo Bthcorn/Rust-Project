@@ -1,6 +1,7 @@
 {
-    "svg.preview.background": "custom",
+    "svg.preview.background": "white",
     "rust-analyzer.linkedProjects": [
+        ".\\data_scraping\\Cargo.toml",
         ".\\data_scraping\\Cargo.toml"
     ]
 }

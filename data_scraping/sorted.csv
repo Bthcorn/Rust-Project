@@ -1,0 +1,7 @@
+Type,Multi-Threaded App Score,Architecture,Cores/Threads (P+E),Base/Boost GHz,TDP / PBP / MTP
+$110 - Core i3-13100F,24.8%,Raptor Lake,4 / 8 (4+0),3.4 / 4.5,60W / 89W
+$221 - Core i5-13400 / F,43.0%,Raptor Lake,10 / 16 (6+4),2.5 / 4.6,65 /148W
+$319 - Core i5-13600K,60.91%,Raptor Lake,14 / 20 (6+8),3.5 / 5.1,125 / 181W
+$409 - Core i7-13700K,79.05%,Raptor Lake,16 / 24 (8+8),3.4 / 5.4,125 / 253W
+$589 - Core i9-13900K,98.62%,Raptor Lake,24 / 32 (8+16),3.0 / 5.8,125 / 253W
+$699 - Core i9-13900KS,99.5%,Raptor Lake,24 / 32 (8+16),3.0 / 6.0,150W / 253W / 320W
