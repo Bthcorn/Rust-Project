@@ -10,8 +10,6 @@ use std::{
     string::String,
 };
 
-// use rayon::prelude::{IntoParallelRefIterator, ParallelIterator};
-
 #[derive(Debug, Clone)]
 pub struct Csv {
     header: Vec<String>,
@@ -120,7 +118,7 @@ pub fn gen_svg_bar(names: &Vec<String>, values: &Vec<String>) -> String {
     ));
 
     let bar_x_offset = (width - 20) / nvalues.len() as u32;
-    let y_offset = (height -20) / nvalues.len() as u32;
+    // let y_offset = (height -20) / nvalues.len() as u32;
 
     // Iterate over the data and create bars and labels
     for (i, (name, value)) in names.iter().zip(nvalues.iter()).enumerate() {
