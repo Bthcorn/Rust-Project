@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300">
+    <Circle cx="38" cy="125" r="5" fill="red" /><text x="38" y="125" text-anchor="middle" font-size="8"
+        fill="black">Indonesia = 163</text>
+    <Circle cx="76" cy="71" r="5" fill="red" /><text x="76" y="71" text-anchor="middle" font-size="8" fill="black">Nepal
+        = 213</text>
+    <Circle cx="114" cy="66" r="5" fill="red" /><text x="114" y="66" text-anchor="middle" font-size="8"
+        fill="black">Bangladesh = 218</text>
+    <Circle cx="152" cy="111" r="5" fill="red" /><text x="152" y="111" text-anchor="middle" font-size="8"
+        fill="black">Maldives = 176</text>
+    <Circle cx="190" cy="129" r="5" fill="red" /><text x="190" y="129" text-anchor="middle" font-size="8"
+        fill="black">India = 159</text>
+    <Circle cx="228" cy="99" r="5" fill="red" /><text x="228" y="99" text-anchor="middle" font-size="8" fill="black">Sri
+        Lanka = 187</text>
+    <Circle cx="266" cy="124" r="5" fill="red" /><text x="266" y="124" text-anchor="middle" font-size="8"
+        fill="black">Myanmar = 164</text>
+    <Circle cx="304" cy="20" r="5" fill="red" /><text x="304" y="20" text-anchor="middle" font-size="8"
+        fill="black">Bhutan = 260</text>
+    <Circle cx="342" cy="86" r="5" fill="red" /><text x="342" y="86" text-anchor="middle" font-size="8"
+        fill="black">Thailand = 199</text>
+    <Circle cx="380" cy="136" r="5" fill="red" /><text x="380" y="136" text-anchor="middle" font-size="8"
+        fill="black">Timor-Leste = 153</text>
+</svg>

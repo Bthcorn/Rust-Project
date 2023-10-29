@@ -105,7 +105,7 @@ pub fn gen_svg_bar(names: &Vec<String>, values: &Vec<String>) -> String {
     let mut content = String::new();
     let nvalues = values
         .iter()
-        .map(|v| v.parse::<i64>().unwrap())
+        .map(|v| v.parse::<f64>().unwrap() as i64)
         .collect::<Vec<i64>>();
     let max_value = nvalues.iter().max().unwrap_or(&0);
 
@@ -119,30 +119,58 @@ pub fn gen_svg_bar(names: &Vec<String>, values: &Vec<String>) -> String {
         width, height
     ));
 
-    let bar_x_offset = width / nvalues.len() as u32;
+    let bar_x_offset = (width - 20) / nvalues.len() as u32;
+    let y_offset = (height -20) / nvalues.len() as u32;
 
     // Iterate over the data and create bars and labels
     for (i, (name, value)) in names.iter().zip(nvalues.iter()).enumerate() {
-        let x = bar_x_offset * i as u32;
-        let y = height - (value * height / max_value);
+        let x = bar_x_offset * (i + 1) as u32;
+        let y = (height) - ((value * (height - 20) as i64) / max_value) as u32;
 
         // Create the bar
         content.push_str(&format!(
-            r#"<Circle cx="{}" cy="{}" r="2" fill="red" />"#,
+            r#"<Circle cx="{}" cy="{}" r="5" fill="red" />"#,
             x,
             y,
         ));
 
         // Create the label
         content.push_str(&format!(
-            r#"<text x="{}" y="{}" text-anchor= "middle" font-size="5"  fill="black">{}</text>"#,
-            x + bar_x_offset,
+            r#"<text x="{}" y="{}" text-anchor= "middle" font-size="8"  fill="black">{} = {}</text>"#,
+            x,
             y,
-            name
-        ))
+            name,
+            value,
+        ));
     }
     content.push_str("</svg>");
     content
+}
+
+#[test]
+fn test_new_csv() {
+    let rows = vec![vec!["Name".to_string(), "Age".to_string()], vec!["Alice".to_string(), "30".to_string()]];
+    let csv = Csv::new(rows.clone());
+    let expected_rows = vec![vec!["Alice".to_string(), "30".to_string()]];
+    assert_eq!(csv.header, vec!["Name".to_string(), "Age".to_string()]);
+    assert_eq!(csv.rows, expected_rows);
+}
+
+#[test]
+fn test_sort_by() {
+    let mut csv = Csv::new(vec![vec!["Name".to_string(), "Age".to_string()], vec!["Bob".to_string(), "25".to_string()], vec!["Alice".to_string(), "30".to_string()]]);
+    csv.sort_by("Name");
+    let expected_rows = vec![vec!["Alice".to_string(), "30".to_string()], vec!["Bob".to_string(), "25".to_string()]];
+    assert_eq!(csv.rows, expected_rows);
+}
+
+#[test]
+fn test_filter() {
+    let mut csv = Csv::new(vec![vec!["Name".to_string(), "Age".to_string()], vec!["Alice".to_string(), "30".to_string()], vec!["Bob".to_string(), "25".to_string()]]);
+    let filtered_csv = csv.filter(&"Alice".to_string());
+    let expected_csv = Csv::new(vec![vec!["Name".to_string(), "Age".to_string()], vec!["Alice".to_string(), "30".to_string()]]);
+    assert_eq!(filtered_csv.header, expected_csv.header);
+    assert_eq!(filtered_csv.rows, expected_csv.rows);
 }
 // ===========================================================
 
@@ -268,6 +296,7 @@ pub struct ConfigApp {
     url: Option<String>,
     filter: Option<String>,
     sort: Option<String>,
+    plot: Option<Vec<String>>,
 }
 
 pub fn get_args() -> Result<ConfigApp, Box<dyn Error>> {
@@ -292,7 +321,7 @@ pub fn get_args() -> Result<ConfigApp, Box<dyn Error>> {
                         .short("o")
                         .long("output")
                         .value_name("JSON_FILE")
-                        .help("Output JASON file")
+                        .help("Output JSON file")
                         .default_value("default.json")
                         .required(true)
                         .takes_value(true),
@@ -358,9 +387,15 @@ pub fn get_args() -> Result<ConfigApp, Box<dyn Error>> {
                         .value_name("SORT_COL")
                         .help("Sort a column")
                         .takes_value(true),
-                ),
-        )
-        .get_matches();
+                ).arg(
+                    Arg::with_name("plot")
+                        .short("p")
+                        .long("plot")
+                        .value_name("COLUMN_NAME")
+                        .help("Plot columns <name> <value>")
+                        .takes_value(true)
+                        .multiple(true),
+                )).get_matches();
 
     let config = match matches.subcommand() {
         ("convert", Some(convert_matches)) => ConfigApp {
@@ -370,6 +405,7 @@ pub fn get_args() -> Result<ConfigApp, Box<dyn Error>> {
             url: None,
             filter: None,
             sort: None,
+            plot: None,
         },
         ("scraping", Some(scrap_matches)) => ConfigApp {
             subcommand: matches.subcommand().0.to_string(),
@@ -378,11 +414,12 @@ pub fn get_args() -> Result<ConfigApp, Box<dyn Error>> {
             url: scrap_matches.value_of("url").map(|v| v.to_string()),
             filter: None,
             sort: None,
+            plot: None,
         },
         ("analyze", Some(analyze_matches)) => {
-            // let filter: Option<Vec<String>> = analyze_matches
-            //     .values_of("filter")
-            //     .map(|values| values.map(String::from).collect());
+            let plot: Option<Vec<String>> = analyze_matches
+                .values_of("plot")
+                .map(|values| values.map(String::from).collect());
             ConfigApp {
                 subcommand: matches.subcommand().0.to_string(),
                 input: analyze_matches.value_of("input").map(|v| v.to_string()),
@@ -392,6 +429,7 @@ pub fn get_args() -> Result<ConfigApp, Box<dyn Error>> {
                     .values_of("filter")
                     .map(|values| values.map(String::from).collect()),
                 sort: analyze_matches.value_of("sort").map(|v| v.to_string()),
+                plot,
             }
         }
         _ => {
@@ -439,6 +477,13 @@ pub fn run_analyze(config: &ConfigApp) -> Result<(), Box<dyn Error>> {
     if let Some(query) = config.filter.as_ref() {
         csv = csv.filter(&query);
         let _ = csv.write_csv(&output);
+    };
+    if let Some(columns) = config.plot.as_ref() {
+        let names = csv.get_column(&columns[0]);
+        let values = csv.get_column(&columns[1]);
+        let svg = gen_svg_bar(&names, &values);
+        let mut file = File::create(output)?;
+        file.write_all(svg.as_bytes())?;
     };
     Ok(())
 }
